@@ -1,0 +1,4 @@
+[plugin]
+description = "dokku meteor settings plugin"
+version = "0.1.0"
+[plugin.config]

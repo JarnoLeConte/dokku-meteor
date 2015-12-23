@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+source "$PLUGIN_CORE_AVAILABLE_PATH/common/functions"
+
+case "$1" in
+
+  meteor:settings)
+    [[ -z $2 ]] && dokku_log_fail "Please specify an app to run the command on"
+    [[ -z $3 ]] && dokku_log_fail "Specify the filepath to your settings file"
+
+    APP="$2"; verify_app_name "$APP"
+    SETTINGS="$3"
+    HOST=$(hostname -f)
+
+    echo "+----------------------------------------------------------------------"
+    echo "|"
+    echo "| You have to copy the settings file to the server manually:"
+    echo "| "
+    echo "| $   scp $SETTINGS root@$HOST:/home/dokku/$APP/meteor-settings.json"
+    echo "| "
+    echo "| This plugin will load the meteor settings each time the app starts."
+    echo "| So once you have uploaded a settings file, restart your app:"
+    echo "| "
+    echo "| $   dokku ps:restart $APP"
+    echo "| "
+    echo "+----------------------------------------------------------------------"
+
+    ;;
+
+  help)
+    cat<<EOF
+    meteor:settings <app> <file.json>, Instructions about how to upload a meteor settings file
+EOF
+    ;;
+
+  *)
+    exit $DOKKU_NOT_IMPLEMENTED_EXIT
+    ;;
+
+esac
