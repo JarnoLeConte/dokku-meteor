@@ -11,6 +11,7 @@ if [ -f $DOKKU_ROOT/$APP/meteor-settings.json ]; then
   test "$(docker wait $id)" -eq 0
   docker cp $DOKKU_ROOT/$APP/meteor-settings.json $id:/app/.profile.d/meteor-settings.json
   docker commit $id $IMAGE > /dev/null
+  docker rm -v $id
 
   id=$(docker run -d $IMAGE /bin/bash -c "mkdir -p /app/.profile.d && echo 'export METEOR_SETTINGS=\"\`cat /app/.profile.d/meteor-settings.json\`\"' > /app/.profile.d/meteor-settings.sh")
   test "$(docker wait $id)" -eq 0
